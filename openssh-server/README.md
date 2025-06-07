@@ -7,7 +7,7 @@ sudo apt-get update && sudo apt-get install -y pwgen
 SSH_PASSWORD=$(pwgen 20 1)
 docker build -t openssh-server --build-arg SSH_PASSWORD="${SSH_PASSWORD}" .
 echo "SSH_PASSWORD: ${SSH_PASSWORD}"
-docker run --rm -it -p 2222:22 openssh-server
+docker run --name openssh-server --rm -it -p 2222:22 openssh-server
 ```
 
 In another container, run:
