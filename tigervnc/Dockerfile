@@ -16,6 +16,18 @@ RUN apt-get update && apt-get install -y \
     xfce4-terminal \
     && rm -rf /var/lib/apt/lists/*
 RUN update-alternatives --set x-terminal-emulator /usr/bin/xfce4-terminal.wrapper
+# Fix "Failed to execute default Web Browser. Input/output error." by installing Firefox
+# Ref: https://support.mozilla.org/en-US/kb/install-firefox-linux
+RUN apt-get update && apt-get install -y \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+RUN install -d -m 0755 /etc/apt/keyrings
+RUN wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
+RUN echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
+RUN echo 'Package: *\nPin: origin packages.mozilla.org\nPin-Priority: 1000' | tee /etc/apt/preferences.d/mozilla
+RUN apt-get update && apt-get install -y \
+    firefox \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install TigerVNC
 RUN apt-get update && apt-get install -y \
