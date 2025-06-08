@@ -146,6 +146,9 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y novnc && \
     rm -rf /var/lib/apt/lists/*
 
+# Link vnc.html to index.html
+RUN ln -s /usr/share/novnc/vnc.html /usr/share/novnc/index.html
+
 # Configure supervisor to manage the noVNC server
 RUN cat <<EOF > /etc/supervisor/conf.d/novnc.conf
 [program:novnc]

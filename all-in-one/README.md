@@ -28,9 +28,9 @@ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 root@loc
 
 ## VNC
 
-Open <http://localhost:6080/vnc.html> in your browser and click "Connect".
+Open <http://localhost:6080> in your browser and click "Connect".
 
-Or you can specify the VNC server address: <http://localhost:6080/vnc.html?host=localhost&port=5900>.
+Or you can specify the VNC server address: <http://localhost:6080/?host=localhost&port=5900>.
 
 This assumes you have a VNC server running on `localhost:5900`.
 
