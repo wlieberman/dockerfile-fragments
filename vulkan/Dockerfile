@@ -1,6 +1,8 @@
 # Ref: https://github.com/j3soon/docker-vulkan-runtime
 FROM ubuntu:22.04
 
+# Setup the required capabilities for the container runtime
+# Ref: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/docker-specialized.html#driver-capabilities
 ENV NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES=all
 
@@ -8,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     libgl1 vulkan-tools \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Vulkan config files
 RUN cat > /etc/vulkan/icd.d/nvidia_icd.json <<EOF
 {
     "file_format_version" : "1.0.0",

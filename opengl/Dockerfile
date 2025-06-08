@@ -1,5 +1,7 @@
 FROM ubuntu:22.04
 
+# Setup the required capabilities for the container runtime
+# Ref: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/docker-specialized.html#driver-capabilities
 ENV NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES=all
 

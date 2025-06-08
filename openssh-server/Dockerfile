@@ -13,6 +13,7 @@ RUN mkdir /var/run/sshd
 RUN sed -i \
     -e 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' \
     /etc/ssh/sshd_config
+# Set environment variables
 # Ref: https://stackoverflow.com/a/34631891
 RUN env | egrep -v "^(HOME=|USER=|MAIL=|LC_ALL=|LS_COLORS=|LANG=|HOSTNAME=|PWD=|TERM=|SHLVL=|LANGUAGE=|_=)" >> /etc/environment
 # Configure supervisor to manage the SSH server

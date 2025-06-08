@@ -26,3 +26,8 @@ If OpenGL is using integrated GPU, run the following to use discrete GPU:
 __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia glxinfo | grep OpenGL
 __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia glxgears
 ```
+
+## References
+
+- [Mesa - Debian Wiki](https://wiki.debian.org/Mesa)
+- [PRIME - ArchWiki](https://wiki.archlinux.org/title/PRIME#Configure_applications_to_render_using_GPU)

@@ -18,3 +18,8 @@ In the container, run:
 xdpyinfo
 xclock
 ```
+
+## References
+
+- [x11-apps](https://packages.debian.org/sid/x11-apps)
+- [x11-utils](https://packages.debian.org/sid/x11-utils)

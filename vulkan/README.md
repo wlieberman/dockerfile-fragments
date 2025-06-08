@@ -18,3 +18,10 @@ In the container, run:
 vulkaninfo --summary
 vkcube
 ```
+
+## References
+
+- [Development Environment :: Vulkan Documentation Project](https://docs.vulkan.org/tutorial/latest/02_Development_environment.html#_vulkan_packages)
+- [nvidia/container-images/vulkan](https://gitlab.com/nvidia/container-images/vulkan/-/blob/master/docker/Dockerfile.ubuntu)
+- [nvidia/container-images/opengl](https://gitlab.com/nvidia/container-images/opengl)
+- [Isaac Sim \| NVIDIA NGC](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/isaac-sim/layers)

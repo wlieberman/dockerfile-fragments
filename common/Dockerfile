@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     nano \
     net-tools \
     netcat-traditional \
+    ssh \
     tmux \
     tree \
     unzip \

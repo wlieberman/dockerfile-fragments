@@ -10,7 +10,7 @@ echo "SSH_PASSWORD: ${SSH_PASSWORD}"
 docker run --name openssh-server --rm -it -p 2222:22 openssh-server
 ```
 
-In another container, run:
+In another machine, run:
 
 ```sh
 ssh -p 2222 root@localhost
