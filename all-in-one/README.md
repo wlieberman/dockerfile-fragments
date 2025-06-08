@@ -5,13 +5,16 @@ Build and run the container:
 ```sh
 sudo apt-get update && sudo apt-get install -y pwgen
 ALL_PASSWORD=$(pwgen 20 1)
-docker build -t all-in-one --build-arg SSH_PASSWORD="${ALL_PASSWORD}" --build-arg TIGERVNC_PASSWORD="${ALL_PASSWORD}" .
+CODE_SERVER_PASSWORD=$(pwgen 20 1)
+docker build -t all-in-one --build-arg SSH_PASSWORD="${ALL_PASSWORD}" --build-arg TIGERVNC_PASSWORD="${ALL_PASSWORD}" --build-arg CODE_SERVER_PASSWORD="${ALL_PASSWORD}" --build-arg JUPYTER_LAB_TOKEN="${ALL_PASSWORD}" .
 echo "ALL_PASSWORD: ${ALL_PASSWORD}"
 
 docker run --name all-in-one --rm -it --gpus all \
   -p 2222:22 \
   -p 5900:5900 \
   -p 6080:6080 \
+  -p 8080:8080 \
+  -p 8888:8888 \
   all-in-one
 ```
 

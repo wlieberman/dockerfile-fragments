@@ -157,6 +157,31 @@ stderr_logfile=/var/log/novnc.err.log
 stdout_logfile=/var/log/novnc.out.log
 EOF
 
+# =====Code Server=====
+
+# Install code-server
+# Ref: https://coder.com/docs/code-server/install#debian-ubuntu
+RUN CODE_SERVER_VERSION=4.100.3 \
+    && curl -fOL https://github.com/coder/code-server/releases/download/v${CODE_SERVER_VERSION}/code-server_${CODE_SERVER_VERSION}_amd64.deb \
+    && dpkg -i code-server_${CODE_SERVER_VERSION}_amd64.deb \
+    && rm code-server_${CODE_SERVER_VERSION}_amd64.deb
+
+# Configure supervisor to manage the code-server
+RUN cat <<EOF > /etc/supervisor/conf.d/code-server.conf
+[program:code-server]
+command=code-server --host 0.0.0.0 --port 8080
+stderr_logfile=/var/log/code-server.err.log
+stdout_logfile=/var/log/code-server.out.log
+EOF
+
+# =====Jupyter Lab=====
+
+# Install pip and Jupyter Lab
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+RUN pip install jupyterlab
+
 # =====Move all password settings to the end=====
 
 # Set the password for the root user
@@ -185,5 +210,28 @@ command=/usr/bin/vncserver :0 -geometry 1920x1080 -depth 24 -localhost no ${FLAG
 stderr_logfile=/var/log/tigervnc.err.log
 stdout_logfile=/var/log/tigervnc.out.log
 EOF
+
+# Set the password for code-server
+ARG CODE_SERVER_PASSWORD
+RUN if [ -z "${CODE_SERVER_PASSWORD}" ]; then AUTH="none"; else AUTH="password"; fi && \
+mkdir -p ~/.config/code-server/ && \
+cat <<EOF > ~/.config/code-server/config.yaml
+bind-addr: 127.0.0.1:8080
+auth: ${AUTH}
+password: ${CODE_SERVER_PASSWORD}
+cert: false
+EOF
+
+# Configure supervisor to manage the Jupyter Lab server
+ARG JUPYTER_LAB_TOKEN
+RUN cat <<EOF > /etc/supervisor/conf.d/jupyter-lab.conf
+[program:jupyter-lab]
+command=jupyter lab --allow-root --ip=0.0.0.0 --no-browser --notebook-dir=/ --NotebookApp.token="${JUPYTER_LAB_TOKEN}"
+stderr_logfile=/var/log/jupyter-lab.err.log
+stdout_logfile=/var/log/jupyter-lab.out.log
+EOF
+# We intentionally use `--NotebookApp.*` instead of `--ServerApp.*` to support older versions of Jupyter Lab
+# Note: `--NotebookApp.password` may be used as an alternative, but it requires generating a hashed password which adds complexity
+# Ref: https://stackoverflow.com/a/77117477
 
 CMD ["/usr/bin/supervisord", "-n"]
