@@ -34,19 +34,20 @@ RUN apt-get update && apt-get install -y \
     tigervnc-standalone-server \
     && rm -rf /var/lib/apt/lists/*
 
-# Configure supervisor to manage the TigerVNC server
-RUN cat <<EOF > /etc/supervisor/conf.d/tigervnc.conf
-[program:tigervnc]
-command=/usr/bin/vncserver :0 -geometry 1920x1080 -depth 24 -localhost no
-stderr_logfile=/var/log/tigervnc.err.log
-stdout_logfile=/var/log/tigervnc.out.log
-EOF
-
 # Set the password for VNC
 RUN touch ~/.Xauthority
 ARG TIGERVNC_PASSWORD
 RUN mkdir -p ~/.vnc && \
     echo "${TIGERVNC_PASSWORD}" | vncpasswd -f > ~/.vnc/passwd && \
     chmod 600 ~/.vnc/passwd
+
+# Configure supervisor to manage the TigerVNC server
+RUN if [ -z "${TIGERVNC_PASSWORD}" ]; then FLAG="-SecurityTypes None --I-KNOW-THIS-IS-INSECURE"; else FLAG=""; fi && \
+cat <<EOF > /etc/supervisor/conf.d/tigervnc.conf
+[program:tigervnc]
+command=/usr/bin/vncserver :0 -geometry 1920x1080 -depth 24 -localhost no ${FLAG}
+stderr_logfile=/var/log/tigervnc.err.log
+stdout_logfile=/var/log/tigervnc.out.log
+EOF
 
 CMD ["/usr/bin/supervisord", "-n"]
